@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+      <link rel="apple-touch-icon" href="icon.png" />
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=yes,viewport-fit=cover">
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+      <meta name="mobile-web-app-capable" content="yes">
+      <style>
+        ::-webkit-scrollbar {
+              display:none;
+        }
+        html {
+          font-family: GillSans, Calibri, Trebuchet, sans-serif;
+          height: 150%;
+        }
+        body {
+          margin: 0 auto;
+          padding: 40px 25px 52px;
+          padding-left: calc(25px + env(safe-area-inset-left));
+          padding-right: calc(25px + env(safe-area-inset-right));
+        }
+        .btn-large {
+          margin-bottom: .5em;
+          width: 20em;
+        }
+        table {
+          width: 20em;
+          margin: 0 auto;
+        }
+      </style>
+    </head>
+
+    <body>
+      <div class="container">
+        <div class="row center-align">
+          <p class="col s12 flow-text">
+            Device Information
+          </p>
+          <div class="col s12">
+            <table class="responsive-table centered">
+              <thead class="blue-grey lighten-3">
+              <tr>
+                <th>FARMID</th>
+                <th>EQIPMENTID</th>
+              </tr>
+              </thead>
+
+              <tbody class="blue-grey lighten-5">
+              <tr>
+                <td>C000000</td>
+                <td>S0000000</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="row center-align">
+          <p class="col s12 flow-text">
+            Command Button
+          </p>
+          <div class="col s12">
+            <a id="gosensing" class='waves-effect waves-light btn-large blue-grey lighten-3 black-text'>GOSENSING</a>
+          </div>
+          <div class="col s12">
+            <a id="stop" class='waves-effect waves-light btn-large blue-grey lighten-3 black-text'>STOP</a>
+          </div>
+          <div class="col s12">
+            <a id="init" class='waves-effect waves-light btn-large blue-grey lighten-3 black-text'>INIT</a>
+          </div>
+          <div class="col s12">
+            <a id="up" class='waves-effect waves-light btn-large blue blue-grey lighten-3 black-text'>UP</a>
+          </div>
+          <div class="col s12">
+            <a id="down" class='waves-effect waves-light btn-large blue blue-grey lighten-3 black-text'>DOWN</a>
+          </div>
+          <div class="col s12">
+            <a id="in" class='waves-effect waves-light btn-large blue blue-grey lighten-3 black-text'>IN</a>
+          </div>
+          <div class="col s12">
+            <a id="out" class='waves-effect waves-light btn-large blue blue-grey lighten-3 black-text'>OUT</a>
+          </div>
+          <div class="col s12">
+            <a id="setpos0" class='waves-effect waves-light btn-large blue-grey lighten-3 black-text'>SETPOS0</a>
+          </div>
+        </div>
+
+        <div class="row center-align">
+          <p class="col s12 flow-text">
+            State Information
+          </p>
+          <div class="col s12">
+            <table class="responsive-table centered" id="stateTable">
+              <thead class="blue-grey lighten-3">
+              <tr>
+                <th>State</th>
+                <th>Value</th>
+              </tr>
+              </thead>
+
+              <tbody class="blue-grey lighten-5">
+              <tr>
+                <td>actionFlag</td>
+                <td><span id="actionFlag"></span></td>
+              </tr>
+              <tr>
+                <td>currentDepth</td>
+                <td><span id="currentDepth"></span></td>
+              </tr>
+              <tr>
+                <td>depth_1</td>
+                <td><span id="depth_1"></span></td>
+              </tr>
+              <tr>
+                <td>inOutFlag</td>
+                <td><span id="inOutFlag"></span></td>
+              </tr>
+              <tr>
+                <td>measureTime</td>
+                <td><span id="measureTime"></span></td>
+              </tr>
+              <tr>
+                <td>sensorvalueDO_1</td>
+                <td><span id="sensorvalueDO_1"></span></td>
+              </tr>
+              <tr>
+                <td>upDownFlag</td>
+                <td><span id="upDownFlag"></span></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+      <!-- firebase -->
+      <script src="https://www.gstatic.com/firebasejs/3.6.9/firebase.js"></script>
+      <script>
+        var database;
+
+        // Initialize Firebase
+        // 개인정보 입력
+        var config = {
+          apiKey: "",
+          authDomain: "",
+          databaseURL: "",
+          projectId: "",
+          storageBucket: "",
+          messagingSenderId: ""
+        };
+        firebase.initializeApp(config);
+        database = firebase.database();
+
+        var cmdRef = database.ref('Command/' + 'C000000&S0000000');
+        cmdRef.on('value', function(snapshot) {
+          $('#gosensing').click(function() {
+            var updates = {GOSENSING: !(snapshot.val().GOSENSING)};
+            cmdRef.update(updates);
+          });
+          $('#stop').click(function() {
+            var updates = {STOP: !(snapshot.val().STOP)};
+            cmdRef.update(updates);
+          });
+          $('#init').click(function() {
+            var updates = {INIT: !(snapshot.val().INIT)};
+            cmdRef.update(updates);
+          });
+          $('#up').click(function() {
+            var updates = {UP: !(snapshot.val().UP)};
+            cmdRef.update(updates);
+          });
+          $('#down').click(function() {
+            var updates = {DOWN: !(snapshot.val().DOWN)};
+            cmdRef.update(updates);
+          });
+          $('#in').click(function() {
+            var updates = {IN: !(snapshot.val().IN)};
+            cmdRef.update(updates);
+          });
+          $('#out').click(function() {
+            var updates = {OUT: !(snapshot.val().OUT)};
+            cmdRef.update(updates);
+          });
+          $('#setpos0').click(function() {
+            var updates = {SETPOS0: !(snapshot.val().SETPOS0)};
+            cmdRef.update(updates);
+          });
+        });
+
+        var infoRef = database.ref('StateInfo/' + 'C000000&S0000000');
+        infoRef.on('value', function(snapshot) {
+          document.getElementById("actionFlag").textContent = snapshot.val().actionFlag;
+          document.getElementById("currentDepth").textContent = snapshot.val().currentDepth;
+          document.getElementById("depth_1").textContent = snapshot.val().depth_1;
+          document.getElementById("inOutFlag").textContent = snapshot.val().inOutFlag;
+          document.getElementById("measureTime").textContent = snapshot.val().measureTime;
+          document.getElementById("sensorvalueDO_1").textContent = snapshot.val().sensorvalueDO_1;
+          document.getElementById("upDownFlag").textContent = snapshot.val().upDownFlag;
+        });
+      </script>
+
+    </body>
+  </html>
