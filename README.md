@@ -17,6 +17,10 @@
 2. esp8266의 GPIO핀에 연결된 센서 모듈의 데이터를 firebase RealtimeDB에 저장  
 3. firebase RealtimeDB에 저장된 센서 값을 웹앱에서 확인 가능  
 
+![](./README/toy-1.png)  
+![](./README/toy-2.png)  
+![](./README/toy-3.png)  
+
 <br>
 
 ## 사용 디바이스  
@@ -25,12 +29,12 @@
 * 디바이스: esp8266-NODEMCU  
 * 센서: 온습도센서(DHT11)  
 
-![esp8266_img](./README/esp8266_img.jpg)  
+![esp8266_img](./README/esp8266_img.jpg){: width="80%"}{: .center}  
 
 ### Webapp  
 * 테스트 디바이스: iPhone XS, iPhone 6  
 
-![webapp_img](./README/webapp_img.png) 
+![webapp_img](./README/webapp_img.png){: width="50%"}{: .center} 
 
 <br>
 
